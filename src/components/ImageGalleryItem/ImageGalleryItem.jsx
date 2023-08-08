@@ -1,48 +1,39 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import css from './ImageGalleryItem.module.css';
 import Modal from '../Modal/Modal';
 
-class ImageGalleryItem extends Component {
-  state = {
-    isOpenModal: false,
-    clickedImageId: null,
+export default function ImageGalleryItem({ hitsArray }) {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [clickedImageId, setClickedImageId] = useState(null);
+
+  const togleModal = itemId => {
+    setIsOpenModal(!isOpenModal);
+    setClickedImageId(itemId);
   };
 
-  togleModal = itemId => {
-    this.setState(({ isOpenModal }) => ({
-      isOpenModal: !isOpenModal,
-      clickedImageId: itemId,
-    }));
-  };
-
-  render() {
-    const { hitsArray } = this.props;
-    return hitsArray.map(hit => (
-      <React.Fragment key={hit.id}>
-        <li
-          className={css.ImageGalleryItem}
-          onClick={() => {
-            this.togleModal(hit.id);
-          }}
-        >
+  return hitsArray.map(hit => (
+    <React.Fragment key={hit.id}>
+      <li
+        className={css.ImageGalleryItem}
+        onClick={() => {
+          togleModal(hit.id);
+        }}
+      >
+        <img
+          className={css.ImageGalleryItemImage}
+          src={hit.webformatURL}
+          alt={hit.user}
+        />
+      </li>
+      {isOpenModal && clickedImageId === hit.id && (
+        <Modal onClose={togleModal}>
           <img
-            className={css.ImageGalleryItemImage}
-            src={hit.webformatURL}
+            src={hit.largeImageURL}
             alt={hit.user}
+            className={css.imgModal}
           />
-        </li>
-        {this.state.isOpenModal && this.state.clickedImageId === hit.id && (
-          <Modal onClose={this.togleModal}>
-            <img
-              src={hit.largeImageURL}
-              alt={hit.user}
-              className={css.imgModal}
-            />
-          </Modal>
-        )}
-      </React.Fragment>
-    ));
-  }
+        </Modal>
+      )}
+    </React.Fragment>
+  ));
 }
-
-export default ImageGalleryItem;
