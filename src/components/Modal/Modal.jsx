@@ -16,7 +16,7 @@ export default function Modal({ onClose, children }) {
     return () => {
       window.removeEventListener('keydown', closeOnEsc);
     };
-  }, [closeOnEsc]);
+  }, [onClose]);
 
   const closeOnOverlay = e => {
     if (e.target === e.currentTarget) {
