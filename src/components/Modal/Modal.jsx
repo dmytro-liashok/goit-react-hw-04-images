@@ -5,13 +5,13 @@ import { createPortal } from 'react-dom';
 const ModalEl = document.querySelector('#id-modal-root');
 
 export default function Modal({ onClose, children }) {
-  const closeOnEsc = e => {
-    if (e.code === 'Escape') {
-      onClose();
-    }
-  };
-
   useEffect(() => {
+    const closeOnEsc = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+
     window.addEventListener('keydown', closeOnEsc);
     return () => {
       window.removeEventListener('keydown', closeOnEsc);
